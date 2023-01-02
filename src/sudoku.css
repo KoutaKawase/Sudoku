@@ -1,0 +1,7 @@
+.cell {
+  @apply flex justify-center border border-neutral-400;
+}
+
+.sudoku-box {
+  @apply border border-neutral-600 flex justify-center grid grid-cols-3 grid-rows-3;
+}
