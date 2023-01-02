@@ -3,6 +3,9 @@ import './sudoku.css';
 
 type Numbers = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 type CellState = 'empty' | Numbers;
+const boardElementCss =
+  'border-2 border-neutral-500 grid grid-cols-3 grid-rows-3 w-4/5 mt-10';
+const boardContainerElement = document.getElementById('container');
 
 class Cell {
   private state: 'empty' | Numbers = 'empty';
@@ -15,15 +18,18 @@ class Cell {
 
   init() {
     this.element.addEventListener('click', () => {
-      console.log(`Clicked Cell${this.element.id}`);
+      this.draw();
     });
   }
+
+  private draw() {
+    if (this.state === 'empty') {
+      this.element.textContent = '';
+      return;
+    }
+    this.element.textContent = `${this.state}`;
+  }
 }
-
-const boardElementCss =
-  'border-2 border-neutral-500 grid grid-cols-3 grid-rows-3 w-4/5 mt-10';
-
-const boardContainerElement = document.getElementById('container');
 
 if (boardContainerElement !== null) {
   let boardElement = document.createElement('div');
@@ -54,15 +60,17 @@ if (boardContainerElement !== null) {
   boardContainerElement.appendChild(boardElement);
 }
 
-const board = [...Array(81)].map((_, i) => {
-  const cellElement = document.getElementById(`cell${i + 1}`);
-  if (cellElement !== null) {
-    const cell = new Cell('empty', cellElement);
+//ボードの状態を表す２次元配列を作成
+let count = 0;
+const board = [...Array(9)].map(() => {
+  return [...Array(9)].map(() => {
+    count += 1;
+    const cellElement = document.getElementById(`cell${count}`)!;
+    const cell = new Cell(1, cellElement);
     cell.init();
     return cell;
-  }
+  });
 });
 
 console.log(board);
-
 export {};
