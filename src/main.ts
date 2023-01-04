@@ -2,6 +2,8 @@ import 'virtual:windi.css';
 import './sudoku.css';
 
 import { init, CellState } from './cells';
+import { GameState } from './gameState';
+import { SELECTED_CELL_CLASS_NAME } from './cell';
 
 const cells: CellState[][] = [
   [0, 0, 3, 0, 0, 2, 0, 0, 0],
@@ -15,8 +17,24 @@ const cells: CellState[][] = [
   [0, 0, 0, 0, 0, 0, 9, 1, 0],
 ];
 
-const gameState = {
+const gameState: GameState = {
   cells,
 };
+
+//数独ボード以外をクリックした場合、どこかのマスが選択状態ならそれを解除する
+document.addEventListener('click', (e) => {
+  if (!(e.target as HTMLElement).closest('.sudoku-box')) {
+    const board = document.getElementById('board');
+    const selectedCells = board?.getElementsByClassName(
+      SELECTED_CELL_CLASS_NAME
+    );
+
+    if (!selectedCells) return;
+
+    Array.prototype.forEach.call(selectedCells, (cell: HTMLElement) => {
+      cell.style.background = 'white';
+    });
+  }
+});
 
 init(gameState.cells);

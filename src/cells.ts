@@ -1,3 +1,5 @@
+import { handleCellClick } from './cell';
+
 export type CellState = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
 const BOARd_WIDTH = 9;
@@ -22,16 +24,21 @@ export function init(cells: CellState[][]) {
       cellNumber += 1;
 
       const cellElement = document.getElementById(`cell${cellNumber}`)!;
+      //座標情報をカスタムタグで保持
+      cellElement.dataset.col = `${col}`;
+      cellElement.dataset.row = `${row}`;
+
       render(cellElement, cells[col][row]);
 
-      cellElement.addEventListener('click', (e) => {
-        console.log((e.currentTarget as HTMLElement).id);
-      });
+      cellElement.addEventListener('click', handleCellClick);
     }
   }
 }
 
 function render(elem: HTMLElement, cellState: CellState) {
+  if (cellState === 0) {
+    elem.textContent = '';
+    return;
+  }
   elem.textContent = `${cellState}`;
-  if (cellState === 0) elem.style.color = 'white';
 }
